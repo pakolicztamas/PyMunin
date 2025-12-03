@@ -150,7 +150,7 @@ class DiskIOinfo:
         """Initialize swap partition to device mappings."""
         self._swapList = []
         sysinfo = SystemInfo()
-        for (swap,attrs) in sysinfo.getSwapStats().iteritems():
+        for (swap,attrs) in sysinfo.getSwapStats().items():
             if attrs['type'] == 'partition':
                 dev = self._getUniqueDev(swap)
                 if dev is not None:
@@ -293,7 +293,7 @@ class DiskIOinfo:
         """
         if self._partList is None:
             self._partList = []
-            for (disk,parts) in self.getPartitionDict().iteritems():
+            for (disk,parts) in self.getPartitionDict().items():
                 for part in parts:
                     self._partList.append((disk,part))
         return self._partList

@@ -726,7 +726,7 @@ class MuninPlugin:
             print ("")
         if (self.isMultigraph and self._nestedGraphs 
             and self._subgraphDict and self._subgraphNames):
-            for (parent_name, subgraph_names) in self._subgraphNames.iteritems():
+            for (parent_name, subgraph_names) in self._subgraphNames.items():
                 for graph_name in subgraph_names:
                     graph = self._subgraphDict[parent_name][graph_name]
                     print ("multigraph %s" % self.getMultigraphID(parent_name, 
@@ -759,7 +759,7 @@ class MuninPlugin:
             print("")
         if (self.isMultigraph and self._nestedGraphs 
             and self._subgraphDict and self._subgraphNames):
-            for (parent_name, subgraph_names) in self._subgraphNames.iteritems():
+            for (parent_name, subgraph_names) in self._subgraphNames.items():
                 for graph_name in subgraph_names:
                     graph = self._subgraphDict[parent_name][graph_name]
                     print ("multigraph %s" % self.getMultigraphID(parent_name, 
@@ -828,7 +828,7 @@ class MuninGraph:
                              by replacing them with '_'.
         
         """
-        self._graphAttrDict = dict((k,v) for (k,v) in locals().iteritems()
+        self._graphAttrDict = dict((k,v) for (k,v) in locals().items()
                                     if (v is not None 
                                         and k not in ('self', 'autoFixNames')))
         self._fieldNameList = []
@@ -866,7 +866,7 @@ class MuninGraph:
             name = self._fixName(name)
             if negative is not None:
                 negative = self._fixName(negative)
-        self._fieldAttrDict[name] = dict(((k,v) for (k,v) in locals().iteritems()
+        self._fieldAttrDict[name] = dict(((k,v) for (k,v) in locals().items()
                                          if (v is not None
                                              and k not in ('self',))))
         self._fieldNameList.append(name)
