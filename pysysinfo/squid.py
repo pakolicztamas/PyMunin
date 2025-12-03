@@ -7,8 +7,8 @@ remote Squid Proxy Servers.
 
 import sys
 import re
-import httplib
-import urllib
+import http.client as httplib
+import urllib.parse as urllib
 import util
 
 __author__ = "Ali Onur Uyar"
@@ -158,11 +158,11 @@ class SquidInfo:
                     mobj = re.match('^(\w[\w\s\(\)]+[\w\)])\s*:\s*(\S.*)$', line)
                     if mobj:
                         section = None
-                        if not section_dict.has_key(section):
+                        if not section in section_dict:
                             section_dict[section] = []
                         section_dict[section].append(line)
                     else:
-                        if not section_dict.has_key('PARSEERROR'):
+                        if not 'PARSEERROR' in section_dict:
                             section_dict['PARSEERROR'] = []
                         section_dict['PARSEERROR'].append(line)   
         return section_dict

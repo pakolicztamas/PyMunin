@@ -48,7 +48,7 @@ class install(_install):
     "Extend base install class to provide a post-install step."
 
     def run(self):
-        if os.environ.has_key('MUNIN_PLUGIN_DIR'):
+        if 'MUNIN_PLUGIN_DIR' in os.environ.keys():
             munin_plugin_dir = os.environ.get('MUNIN_PLUGIN_DIR')
         elif self.root is None:
             munin_plugin_dir = os.path.normpath(
@@ -62,7 +62,7 @@ class install(_install):
         _install.run(self)
         # Installing the plugins requires write permission to plugins directory
         # (/usr/share/munin/plugins) which is default owned by root.
-        print "Munin Plugin Directory: %s" % munin_plugin_dir
+        print ("Munin Plugin Directory: %s" % munin_plugin_dir)
         if os.path.exists(munin_plugin_dir):
             try:
                 for name in plugin_names:
@@ -71,12 +71,12 @@ class install(_install):
                         u'%s-%s' % (PYMUNIN_SCRIPT_FILENAME_PREFIX, name)
                     )
                     destination = os.path.join(munin_plugin_dir, name)
-                    print "Installing %s to %s." % (name, munin_plugin_dir)
+                    print ("Installing %s to %s." % (name, munin_plugin_dir))
                     shutil.copy(source, destination)
-            except IOError, e:
+            except IOError as e:
                 if e.errno in  (errno.EACCES, errno.ENOENT):
                     # Access denied or file/directory not found.
-                    print "*" * 78
+                    print ("*" * 78)
                     if e.errno == errno.EACCES:
                         print ("You do not have permission to install the plugins to %s." 
                                % munin_plugin_dir)
@@ -100,7 +100,7 @@ class install(_install):
                     print ("You will need to copy manually using the script: %s\n"
                            "Example: sudo %s"
                            % (script, script))
-                    print "*" * 78
+                    print ("*" * 78)
                 else:
                     # Raise original exception
                     raise

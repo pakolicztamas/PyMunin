@@ -533,7 +533,7 @@ class MuninMySQLplugin(MuninPlugin):
                 for field in self.getGraphFieldList('mysql_proc_status'):
                     stats[field] = 0
                 for (k, v) in self._procStatus.items():
-                    if stats.has_key(k):
+                    if k in stats:
                         stats[k] = v
                     else:
                         stats['unknown'] += v

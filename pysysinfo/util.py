@@ -5,9 +5,10 @@
 import sys
 import re
 import subprocess
-import urllib, urllib2
+import urllib
+import urllib.request as urllib2
 import socket
-import telnetlib
+import telnetlib3
 
 
 __author__ = "Ali Onur Uyar"
@@ -96,7 +97,7 @@ def exec_command(args, env=None):
                                stderr=subprocess.PIPE, 
                                bufsize=buffSize,
                                env=env)
-    except OSError, e:
+    except OSError as e:
         raise Exception("Execution of command failed.\n",
                         "  Command: %s\n  Error: %s" % (' '.join(args), str(e)))
     out, err = cmd.communicate(None)
@@ -130,7 +131,7 @@ def get_url(url, user=None, password=None, params=None, use_post=False):
             resp = opener.open(req_url, data)
         else:
             resp = opener.open(req_url, data, timeoutHTTP)
-    except urllib2.URLError, e:
+    except urllib2.URLError as e:
         raise Exception("Retrieval of URL failed.\n"
                         "  url: %s\n  Error: %s" % (url, str(e)))
     return socket_read(resp)
@@ -160,7 +161,7 @@ class NestedDict(dict):
             curr_dict = self
             last_key = keys.pop()
             for key in keys:
-                if not curr_dict.has_key(key) or not isinstance(curr_dict[key], 
+                if not key in curr_dict or not isinstance(curr_dict[key], 
                                                                 NestedDict):
                     curr_dict[key] = type(self)()
                 curr_dict = curr_dict[key]
@@ -198,7 +199,7 @@ class SoftwareVersion(tuple):
         may end with any string.
         
         """
-        if isinstance(version, basestring):
+        if isinstance(version, str):
             mobj = re.match('(?P<version>\d+(\.\d+)*)(?P<suffix>.*)$', version)
             if mobj:
                 version = [int(i) for i in mobj.groupdict()['version'].split('.')]
@@ -243,7 +244,7 @@ class TableFilter:
         @param ignore_case: Case insensitive matching will be used if True.
         
         """
-        if isinstance(patterns, basestring):
+        if isinstance(patterns, str):
             patt_list = (patterns,)
         elif isinstance(patterns, (tuple, list)):
             patt_list = list(patterns)
@@ -269,7 +270,7 @@ class TableFilter:
         @param column: The column header.
         
         """
-        if self._filters.has_key(column):
+        if column in self._filters:
             del self._filters[column]
             
     def registerFilters(self, **kwargs):
@@ -343,9 +344,9 @@ class TableFilter:
         return result
     
 
-class Telnet(telnetlib.Telnet):
+class Telnet(telnetlib3.Telnet):
     
-    __doc__ = telnetlib.Telnet.__doc__
+    __doc__ = telnetlib3.Telnet.__doc__
     
     def __init__(self, host=None, port=0, socket_file=None, 
                  timeout=socket.getdefaulttimeout()):
@@ -359,7 +360,7 @@ class Telnet(telnetlib.Telnet):
         named socket; timeout is optional and host must be None.
         
         """
-        telnetlib.Telnet.__init__(self, timeout=timeout)
+        telnetlib3.Telnet.__init__(self, timeout=timeout)
         if host is not None or socket_file is not None:
             self.open(host, port, socket_file, timeout=timeout)
     
@@ -380,9 +381,9 @@ class Telnet(telnetlib.Telnet):
         self.socket_file = socket_file
         if host is not None:
             if sys.version_info[:2] >= (2,6):
-                telnetlib.Telnet.open(self, host, port, timeout)
+                telnetlib3.Telnet.open(self, host, port, timeout)
             else:
-                telnetlib.Telnet.open(self, host, port)
+                telnetlib3.Telnet.open(self, host, port)
         elif socket_file is not None:
             self.eof = 0
             self.host = host

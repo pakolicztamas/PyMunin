@@ -87,7 +87,7 @@ class APCinfo:
         self._statusDict = {}
         for line in response.splitlines():
             cols = line.split(':')
-            if not self._statusDict.has_key(cols[0]):
+            if not cols[0] in self._statusDict:
                 self._statusDict[cols[0]] = {}
             self._statusDict[cols[0]][cols[1]] = util.parse_value(cols[2])
     

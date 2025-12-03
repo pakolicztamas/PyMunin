@@ -207,7 +207,7 @@ class DiskIOinfo:
             if devclass is not None:
                 devdir = os.path.join(sysfsBlockdevDir, dev)
                 if os.path.isdir(devdir):
-                    if not self._devClassTree.has_key(devclass):
+                    if not devclass in self._devClassTree:
                         self._devClassTree[devclass] = []
                     self._devClassTree[devclass].append(dev)
                     self._mapDevType[dev] = devclass
@@ -222,7 +222,7 @@ class DiskIOinfo:
                 idx += 1 
             for dev in basedevs[idx:]:
                 if re.match("%s(\d+|p\d+)$" % dev, partdev):
-                    if not self._partitionTree.has_key(dev):
+                    if not dev in self._partitionTree:
                         self._partitionTree[dev] = []
                     self._partitionTree[dev].append(partdev)
                     self._mapDevType[partdev] = 'part'
@@ -375,7 +375,7 @@ class DiskIOinfo:
         if devtype is not None:
             if self._devClassTree is None:
                 self._initDevClasses()
-            if devtype <> self._mapDevType.get(dev):
+            if devtype != self._mapDevType.get(dev):
                 return None
         return self._diskStats.get(dev) 
 

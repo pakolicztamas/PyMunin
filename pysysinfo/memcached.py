@@ -72,7 +72,7 @@ class MemcachedInfo:
         try:
             if self._timeout is not None:
                 self._conn = util.Telnet(self._host, self._port, self._socketFile, 
-                                         timeout)
+                                         self.timeout)
             else:
                 self._conn = util.Telnet(self._host, self._port, self._socketFile)
         except:     
@@ -118,7 +118,7 @@ class MemcachedInfo:
                 mobj = re.match('STAT\s(\w+:)?(\d+):(\w+)\s(\S+)$',  line)
                 if mobj:
                     (slab, key, val) = mobj.groups()[-3:]      
-                    if not info_dict['slabs'].has_key(slab):
+                    if not slab in info_dict['slabs']:
                         info_dict['slabs'][slab] = {}
                     info_dict['slabs'][slab][key] = util.parse_value(val, True)
         return info_dict

@@ -81,7 +81,7 @@ class NetIfaceInfo:
             mobj = re.match('^\s+(inet|inet6)\s+([\d\.\:A-Za-z]+)\/(\d+)($|\s+.*\S)\s*$', line)
             if mobj:
                 proto = mobj.group(1)
-                if not conf[iface].has_key(proto):
+                if not proto in conf[iface]:
                     conf[iface][proto] = []
                 addrinfo = {}
                 addrinfo['addr'] = mobj.group(2).lower()

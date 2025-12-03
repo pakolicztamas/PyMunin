@@ -12,7 +12,7 @@ for setting the connection parameters for AMI:
 import sys
 import os.path
 import re
-import telnetlib
+import telnetlib3
 import util
 
 __author__ = "Ali Onur Uyar"
@@ -138,10 +138,10 @@ class AsteriskInfo:
         """Connect to Asterisk Manager Interface."""
         try:
             if sys.version_info[:2] >= (2,6):
-                self._conn = telnetlib.Telnet(self._amihost, self._amiport, 
+                self._conn = telnetlib3.Telnet(self._amihost, self._amiport, 
                                               connTimeout)
             else:
-                self._conn = telnetlib.Telnet(self._amihost, self._amiport)
+                self._conn = telnetlib3.Telnet(self._amihost, self._amiport)
         except:
             raise Exception(
                 "Connection to Asterisk Manager Interface on "
@@ -187,7 +187,7 @@ class AsteriskInfo:
     def _printResponse(self):
         """Read and print response from Asterisk Manager Interface."""
         resp_str = self._conn.read_until("\r\n\r\n", connTimeout)
-        print resp_str
+        print (resp_str)
 
     def _getGreeting(self):
         """Read and parse Asterisk Manager Interface Greeting to determine and
@@ -734,7 +734,7 @@ class AsteriskInfo:
                 if mobj:
                     info_dict[queue]['members']['total'] += 1
                     state = mobj.group(1).lower().replace(' ', '_')
-                    if info_dict[queue]['members'].has_key(state):
+                    if state in info_dict[queue]['members']:
                         info_dict[queue]['members'][state] += 1
                     else:
                         raise AttributeError("Undefined queue member state %s"
@@ -768,7 +768,7 @@ class AsteriskInfo:
             for line in section.splitlines():
                 mobj = re.match('(\S.*\S)\s*:\s*(\d+)\s*$', line)
                 if mobj:
-                    if not info_dict.has_key(ctxt):
+                    if not ctxt in info_dict:
                         info_dict[ctxt] = {}
                     info_dict[ctxt][mobj.group(1).lower()] = int(mobj.group(2).lower())
                 elif i == 0:
