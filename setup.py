@@ -96,7 +96,7 @@ class install(_install):
                             f.write('cp %s %s\n' % (source, destination))
                     finally:
                         f.close()
-                    os.chmod(script, 0755)
+                    os.chmod(script, 0o0755)
                     print ("You will need to copy manually using the script: %s\n"
                            "Example: sudo %s"
                            % (script, script))
